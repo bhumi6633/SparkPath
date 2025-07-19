@@ -9,6 +9,7 @@ from routes.profile import profile_bp
 from routes.dashboard import dashboard_bp
 from routes.stations import stations_bp
 from routes.summary import summary_bp
+from routes.auth import auth_bp
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
@@ -38,7 +39,7 @@ def create_app():
     app.register_blueprint(stations_bp, url_prefix='/stations')
     app.register_blueprint(summary_bp, url_prefix='/summary')
     app.register_blueprint(dashboard_bp, url_prefix="/dashboard")
-
+    app.register_blueprint(auth_bp)
     return app
 
 if __name__ == '__main__':

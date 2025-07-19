@@ -6,6 +6,29 @@ function Chatbot() {
         { text: "Hello! I'm EcoBot+, your SparkPath assistant. How can I help you with sustainable transportation today?", isBot: true }
     ]);
     const [inputMessage, setInputMessage] = useState('');
+<<<<<<< HEAD
+    const [loading, setLoading] = useState(false);
+
+    const handleSendMessage = async () => {
+        if (inputMessage.trim() === '') return;
+        const newMessage = { text: inputMessage, isBot: false };
+        setMessages(prev => [...prev, newMessage]);
+        setInputMessage('');
+        setLoading(true);
+
+        try {
+            const res = await fetch('/ai/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: inputMessage })
+            });
+            const data = await res.json();
+            setMessages(prev => [...prev, { text: data.response || 'Sorry, I could not get a response from EcoBot+.', isBot: true }]);
+        } catch (err) {
+            setMessages(prev => [...prev, { text: 'Sorry, there was an error connecting to EcoBot+.', isBot: true }]);
+        } finally {
+            setLoading(false);
+=======
     const [isLoading, setIsLoading] = useState(false);
 
     const sendMessageToAI = async (message) => {
@@ -53,6 +76,7 @@ function Chatbot() {
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
+>>>>>>> 5830a7e75858318dcab1f12fe830a7925ff5b2b3
         }
     };
 
@@ -95,6 +119,11 @@ function Chatbot() {
                                 </div>
                             </div>
                         ))}
+<<<<<<< HEAD
+                        {loading && (
+                            <div className="message-container bot">
+                                <div className="message bot">EcoBot+ is typing...</div>
+=======
                         {isLoading && (
                             <div className="message-container bot">
                                 <div className="message bot">
@@ -107,6 +136,7 @@ function Chatbot() {
                                         EcoBot+ is thinking...
                                     </div>
                                 </div>
+>>>>>>> 5830a7e75858318dcab1f12fe830a7925ff5b2b3
                             </div>
                         )}
                     </div>
@@ -119,12 +149,20 @@ function Chatbot() {
                                 onKeyPress={handleKeyPress}
                                 placeholder="Ask me about sustainable transportation..."
                                 className="chatbot-input-field"
+<<<<<<< HEAD
+                                disabled={loading}
+=======
                                 disabled={isLoading}
+>>>>>>> 5830a7e75858318dcab1f12fe830a7925ff5b2b3
                             />
                             <button
                                 onClick={handleSendMessage}
                                 className="chatbot-send-button"
+<<<<<<< HEAD
+                                disabled={loading || !inputMessage.trim()}
+=======
                                 disabled={isLoading}
+>>>>>>> 5830a7e75858318dcab1f12fe830a7925ff5b2b3
                             >
                                 Send
                             </button>

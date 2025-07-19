@@ -13,7 +13,11 @@ const center = {
   lng: -79.3832,
 };
 
-const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+if(!apiKey) {
+  console.error("Missing Google Maps API Key")
+  alert("Map cannot load: Missing Google Maps API")
+}
 
 const MapComponent = () => {
   const [map, setMap] = useState(null);
