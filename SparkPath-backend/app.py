@@ -9,11 +9,12 @@ from routes.stations import stations_bp
 from routes.summary import summary_bp
 
 from dotenv import load_dotenv
-
 # Load .env
+
+load_dotenv(override=True)
+os.environ["GOOGLE_MAPS_API_KEY"] = os.getenv("GOOGLE_MAPS_API_KEY")
+
 load_dotenv()
-
-
 def create_app():
     app = Flask(__name__)
     CORS(app)
