@@ -1,7 +1,13 @@
 from flask import Flask
 from flask_cors import CORS
-
 import os
+from routes.rides import rides_bp
+from routes.carbon import carbon_bp
+from routes.time import time_bp
+from routes.ai import ai_bp
+from routes.stations import stations_bp
+from routes.summary import summary_bp
+
 from dotenv import load_dotenv
 
 # Load .env
@@ -16,12 +22,6 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    from routes.rides import rides_bp
-    from routes.carbon import carbon_bp
-    from routes.time import time_bp
-    from routes.ai import ai_bp
-    from routes.stations import stations_bp
-    from routes.summary import summary_bp
 
     app.register_blueprint(rides_bp, url_prefix='/rides')
     app.register_blueprint(carbon_bp, url_prefix='/carbon')
