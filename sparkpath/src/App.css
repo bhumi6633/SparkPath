@@ -181,3 +181,109 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* Sign Up/In Form Styling */
+.su-outer-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    padding: 48px 16px;
+}
+.su-inner-container {
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+}
+.su-card {
+    background: #fff;
+    padding: 32px 24px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    width: 100%;
+    box-sizing: border-box;
+}
+.su-title-container {
+    text-align: center;
+    margin-bottom: 24px;
+}
+.su-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1a202c;
+    margin: 0;
+}
+.su-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.su-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.su-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 4px;
+}
+.su-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f9fafb;
+    color: #1a202c;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+.su-input:focus {
+    border: 1.5px solid #2563eb;
+    box-shadow: 0 0 0 2px #2563eb22;
+    background: #fff;
+}
+.su-button {
+    width: 100%;
+    background: #2563eb;
+    color: #fff;
+    padding: 10px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.su-button:hover {
+    background: #1d4ed8;
+}
+.su-toggle-container {
+    margin-top: 24px;
+    text-align: center;
+}
+.su-toggle-text {
+    color: #6b7280;
+    font-size: 1rem;
+}
+.su-toggle-button {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0;
+}
+.su-toggle-button:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
