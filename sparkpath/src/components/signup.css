@@ -1,0 +1,89 @@
+/* signup.css */
+.su-outer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 92vh;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.su-inner-container {
+  background-color: #fff;
+  padding: 3rem 3.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  max-width: 500px;
+  width: 100%;
+}
+
+.su-card {
+  width: 100%;
+}
+
+.su-title-container {
+  margin-bottom: 1.5rem;
+}
+
+.su-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #243b55;
+}
+
+.su-form-group {
+  margin-bottom: 1rem;
+}
+
+.su-label {
+  display: block;
+  font-weight: bold;
+  color: #243b55;
+  margin-bottom: 0.3rem;
+}
+
+.su-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #f8f8f8;
+}
+
+.su-button {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #ffda61;
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+
+.su-button:hover {
+  background-color: #f4cd40;
+}
+
+.su-toggle-container {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.su-toggle-text {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.su-toggle-button {
+  background: none;
+  border: none;
+  color: #243b55;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 0.3rem;
+}

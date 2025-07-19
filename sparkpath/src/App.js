@@ -5,6 +5,8 @@ import Chatbot from './components/chatbot';
 import SignUpIn from './components/sign-up-in';
 import PostRide from './components/post-ride';
 import FindARide from './components/find-a-ride';
+import './components/homepage.css';
+import './components/signup.css';
 import FoundRides from './components/found-rides';
 import HomePage from './components/homepage';
 import PostRideConfirm from './components/post-ride-confirm';
