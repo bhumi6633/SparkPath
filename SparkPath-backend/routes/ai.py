@@ -8,8 +8,8 @@ load_dotenv()
 #creates a flask blueprint
 ai_bp = Blueprint("ai", __name__)
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-pro") #geminipro model
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+model = genai.GenerativeModel("models/gemini-1.5-pro-latest") #geminipro model
 
 @ai_bp.route("/ask", methods=["POST"])
 def ask_question():

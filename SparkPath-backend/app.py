@@ -13,10 +13,6 @@ from dotenv import load_dotenv
 # Load .env
 load_dotenv()
 
-from dotenv import load_dotenv
-load_dotenv()
-import os
-
 
 def create_app():
     app = Flask(__name__)
