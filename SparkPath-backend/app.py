@@ -7,8 +7,9 @@ from routes.time import time_bp
 from routes.ai import ai_bp
 from routes.stations import stations_bp
 from routes.summary import summary_bp
-
+from pymongo import MongoClient
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 
 # Load .env
 load_dotenv()
@@ -17,6 +18,12 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
     CORS(app)
+
+    # MongoDB setup
+    mongo_uri = os.getenv("MONGO_URI")
+    mongo_client = MongoClient(mongo_uri)
+    app.db = mongo_client.get_database()  # Use the default DB from URI
+    
 
 
     app.register_blueprint(rides_bp, url_prefix='/rides')
