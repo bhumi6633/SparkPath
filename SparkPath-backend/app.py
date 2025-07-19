@@ -15,17 +15,16 @@ from dotenv import load_dotenv
 
 from urllib.parse import urlparse
 
-
 # Load .env
 
-load_dotenv(override=True)
-os.environ["GOOGLE_MAPS_API_KEY"] = os.getenv("GOOGLE_MAPS_API_KEY")
+#load_dotenv(override=True)
+#os.environ["GOOGLE_MAPS_API_KEY"] = os.getenv("GOOGLE_MAPS_API_KEY")
 
 load_dotenv()
 def create_app():
     app = Flask(__name__)
     CORS(app)
-
+    
     # MongoDB setup
     mongo_uri = os.getenv("MONGO_URI")
     mongo_client = MongoClient(mongo_uri)
