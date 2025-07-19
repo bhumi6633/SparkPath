@@ -6,12 +6,28 @@ function Chatbot() {
         { text: "Hello! How can I help you with SparkPath today?", isBot: true }
     ]);
     const [inputMessage, setInputMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (inputMessage.trim() === '') return;
         const newMessage = { text: inputMessage, isBot: false };
-        setMessages([...messages, newMessage]);
+        setMessages(prev => [...prev, newMessage]);
         setInputMessage('');
+        setLoading(true);
+
+        try {
+            const res = await fetch('/ai/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: inputMessage })
+            });
+            const data = await res.json();
+            setMessages(prev => [...prev, { text: data.response || 'Sorry, I could not get a response from EcoBot+.', isBot: true }]);
+        } catch (err) {
+            setMessages(prev => [...prev, { text: 'Sorry, there was an error connecting to EcoBot+.', isBot: true }]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleKeyPress = (e) => {
@@ -53,6 +69,11 @@ function Chatbot() {
                                 </div>
                             </div>
                         ))}
+                        {loading && (
+                            <div className="message-container bot">
+                                <div className="message bot">EcoBot+ is typing...</div>
+                            </div>
+                        )}
                     </div>
                     <div className="chatbot-input">
                         <div className="input-container">
@@ -63,10 +84,12 @@ function Chatbot() {
                                 onKeyPress={handleKeyPress}
                                 placeholder="Type your message here..."
                                 className="chatbot-input-field"
+                                disabled={loading}
                             />
                             <button
                                 onClick={handleSendMessage}
                                 className="chatbot-send-button"
+                                disabled={loading || !inputMessage.trim()}
                             >
                                 Send
                             </button>
