@@ -7,8 +7,9 @@ import PostRide from './components/post-ride';
 import FindARide from './components/find-a-ride';
 import './components/homepage.css';
 import './components/signup.css';
-import './components/postride.css';
+import './components/post-ride.css';
 import './components/find-a-ride.css';
+/*import './components/navbar.css';*/
 import FoundRides from './components/found-rides';
 import HomePage from './components/homepage';
 import PostRideConfirm from './components/post-ride-confirm';

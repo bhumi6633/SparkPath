@@ -16,7 +16,7 @@ function FindaRideInfo() {
 
   return (
     <div className="fri-wrapper">
-      <h1 className="fri-heading">Find a Ride</h1>
+      <h1 className="fri-heading">FIND A RIDE</h1>
       <p className="fri-subheading">Find a ride to your destination</p>
 
       <div className="fri-card">
