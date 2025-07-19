@@ -29,7 +29,7 @@ def create_app():
     # MongoDB setup
     mongo_uri = os.getenv("MONGO_URI")
     mongo_client = MongoClient(mongo_uri)
-    app.db = mongo_client.get_database()  # Use the default DB from URI
+    app.db = mongo_client["SparkPath"]  # Use the default DB from URI
     
     app.register_blueprint(profile_bp, url_prefix='/profile')
     app.register_blueprint(rides_bp, url_prefix='/rides')

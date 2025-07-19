@@ -7,7 +7,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 #here we are combining the user ride summary with user que and getting a response
 def ask_gemini(prompt_summary, user_question):
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-2.0-flash')
     chat = model.start_chat()
 
     full_prompt = f"""
