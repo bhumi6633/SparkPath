@@ -6,6 +6,7 @@ from routes.carbon import carbon_bp
 from routes.time import time_bp
 from routes.ai import ai_bp
 from routes.profile import profile_bp
+from routes.dashboard import dashboard_bp
 from routes.stations import stations_bp
 from routes.summary import summary_bp
 from pymongo import MongoClient
@@ -37,6 +38,7 @@ def create_app():
     app.register_blueprint(ai_bp, url_prefix='/ai')
     app.register_blueprint(stations_bp, url_prefix='/stations')
     app.register_blueprint(summary_bp, url_prefix='/summary')
+    app.register_blueprint(dashboard_bp, url_prefix="/dashboard")
 
     return app
 
