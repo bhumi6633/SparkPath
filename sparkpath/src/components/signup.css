@@ -1,89 +1,98 @@
-/* signup.css */
+/* signupin.css */
 .su-outer-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 92vh;
-  background: linear-gradient(135deg, #141e30, #243b55);
-  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(to right, #1b4332, #2d6a4f, #40916c); /* Spark green gradient */
+  padding: 2rem;
 }
 
-.su-inner-container {
-  background-color: #fff;
-  padding: 3rem 3.5rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  max-width: 500px;
-  width: 100%;
-}
-
-.su-card {
-  width: 100%;
-}
-
-.su-title-container {
-  margin-bottom: 1.5rem;
+.su-outer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0b2c36, #112e3a); 
+  padding: 2rem;
 }
 
 .su-title {
-  text-align: center;
   font-size: 2rem;
-  color: #243b55;
+  font-weight: 700;
+  color: #1b4332; /* deep green title */
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.su-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .su-form-group {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .su-label {
-  display: block;
-  font-weight: bold;
-  color: #243b55;
-  margin-bottom: 0.3rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1b4332; /* label green */
+  margin-bottom: 0.4rem;
 }
 
 .su-input {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #f9fafb;
   font-size: 1rem;
-  background-color: #f8f8f8;
+  transition: all 0.2s ease;
+}
+
+.su-input:focus {
+  outline: none;
+  background-color: #f1fdf7;
+  border-color: #1b4332;
+  box-shadow: 0 0 0 2px rgba(27, 67, 50, 0.3); /* subtle green glow */
 }
 
 .su-button {
-  width: 100%;
-  padding: 0.9rem;
-  background-color: #ffda61;
-  color: #000;
-  font-weight: 600;
-  font-size: 1rem;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  padding: 0.8rem 1rem;
   margin-top: 1rem;
-  transition: background 0.3s ease;
+  background-color: #1b4332;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .su-button:hover {
-  background-color: #f4cd40;
-}
-
-.su-toggle-container {
-  text-align: center;
-  margin-top: 1rem;
+  background-color: #14532d;
 }
 
 .su-toggle-text {
-  font-size: 0.95rem;
-  color: #444;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #374151;
 }
 
 .su-toggle-button {
   background: none;
+  color: #1b4332;
+  font-weight: 600;
   border: none;
-  color: #243b55;
-  font-weight: bold;
   cursor: pointer;
-  margin-left: 0.3rem;
+  padding: 0;
+  margin-left: 4px;
+  text-decoration: underline;
+}
+
+.su-card {
+  width: 100%;
 }
