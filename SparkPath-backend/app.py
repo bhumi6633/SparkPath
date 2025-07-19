@@ -5,10 +5,12 @@ from routes.rides import rides_bp
 from routes.carbon import carbon_bp
 from routes.time import time_bp
 from routes.ai import ai_bp
+from routes.profile import profile_bp
 from routes.stations import stations_bp
 from routes.summary import summary_bp
 from pymongo import MongoClient
 from dotenv import load_dotenv
+
 
 from urllib.parse import urlparse
 
@@ -28,8 +30,7 @@ def create_app():
     mongo_client = MongoClient(mongo_uri)
     app.db = mongo_client.get_database()  # Use the default DB from URI
     
-
-
+    app.register_blueprint(profile_bp, url_prefix='/profile')
     app.register_blueprint(rides_bp, url_prefix='/rides')
     app.register_blueprint(carbon_bp, url_prefix='/carbon')
     app.register_blueprint(time_bp, url_prefix='/time')

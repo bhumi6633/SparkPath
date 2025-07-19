@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask import current_app
+#from bson import ObjectId
 from datetime import datetime
 from utils.maps_helper import get_distance_and_duration
 from utils.carbon_calc import (
@@ -92,10 +93,49 @@ def find_a_ride():
 def book_ride():
     data = request.get_json()
 
-    # Attach timestamp
-    data['timestamp'] = datetime.utcnow()
+    # Basic required fields
+    required_fields = ['pickup', 'dropoff', 'distance_km', 'passengers', 'co2_saved_kg']
+    missing = [field for field in required_fields if field not in data]
 
-    # Save to MongoDB
-    current_app.db.rides.insert_one(data)
+    if missing:
+        return jsonify({"error": f"Missing fields: {', '.join(missing)}"}), 400
 
-    return jsonify({"message": " Ride stored in DB!"}), 201
+    try:
+        current_app.db.rides.insert_one(data)
+        return jsonify({"message": "Ride stored successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@rides_bp.route('/history', methods=['GET'])
+def get_ride_history():
+    try:
+        # Optional query params
+        user_id = request.args.get('user_id')
+        start_date = request.args.get('start_date')  # Format: YYYY-MM-DD
+        end_date = request.args.get('end_date')      # Format: YYYY-MM-DD
+
+        query = {}
+
+        if user_id:
+            query['user_id'] = user_id
+
+        if start_date or end_date:
+            query['timestamp'] = {}
+
+            if start_date:
+                query['timestamp']['$gte'] = datetime.strptime(start_date, "%Y-%m-%d")
+            if end_date:
+                query['timestamp']['$lte'] = datetime.strptime(end_date, "%Y-%m-%d")
+
+        rides_cursor = current_app.db.rides.find(query)
+        rides = []
+        for ride in rides_cursor:
+            ride['_id'] = str(ride['_id'])
+            ride['timestamp'] = ride.get('timestamp', datetime.utcnow()).strftime("%Y-%m-%d %H:%M")
+            rides.append(ride)
+
+        return jsonify(rides), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
