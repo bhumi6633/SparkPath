@@ -7,6 +7,7 @@ import PostRide from './components/post-ride';
 import FindARide from './components/find-a-ride';
 import FoundRides from './components/found-rides';
 import HomePage from './components/homepage';
+import PostRideConfirm from './components/post-ride-confirm';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // AuthContext and Provider
@@ -33,6 +34,8 @@ function App() {
             <Route path="/find-a-ride" element={<FindARide />} />
             <Route path="/found-rides" element={<FoundRides />} />
             <Route path="/sign" element={<SignUpIn />} />
+            <Route path="/confirm" element={<PostRideConfirm />} />
+            <Route path="/home" element={<HomePage />} />
           </Routes>
           <Chatbot />
         </div>

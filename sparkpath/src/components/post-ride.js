@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import MapComponent from './map-component';
 import { AuthContext } from '../App';
+import { Link } from 'react-router-dom';
 
 function PostRide() {
   const { isSignedIn } = useContext(AuthContext);
@@ -58,9 +59,9 @@ function PostRide() {
         />
       </div>
       <div className='par-trip-card'>
-        <button className="search-rides" style={{ width: '100%' }} disabled={!isSignedIn} title={!isSignedIn ? 'Please sign in to confirm' : ''}>Confirm</button>
+        <Link to="/confirm" className="search-rides" style={{ width: '100%' }} disabled={!isSignedIn} title={!isSignedIn ? 'Please sign in to confirm' : ''}>Confirm</Link>
         {!isSignedIn && <div style={{color: 'red', marginTop: 8}}>You must be signed in to confirm a ride.</div>}
-      </div>
+      </div> 
     </div>
   );
 }
