@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask import current_app
-#from bson import ObjectId
+from bson import ObjectId
 from datetime import datetime
 from utils.maps_helper import get_distance_and_duration
 from utils.carbon_calc import (
@@ -136,6 +136,22 @@ def get_ride_history():
             rides.append(ride)
 
         return jsonify(rides), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@rides_bp.route('/cancel/<ride_id>', methods=['PATCH'])
+def cancel_ride(ride_id):
+    try:
+        result = current_app.db.rides.update_one(
+            {"_id": ObjectId(ride_id)},
+            {"$set": {"status": "cancelled"}}
+        )
+
+        if result.matched_count == 0:
+            return jsonify({"error": "Ride not found"}), 404
+
+        return jsonify({"message": f"Ride {ride_id} has been cancelled"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
