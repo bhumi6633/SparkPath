@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
     return (
@@ -6,11 +7,11 @@ function Navbar() {
             <div className="navbar-container">
                 <div className="navbar-logo">
                     <img src="/image1.png" alt="SparkPath Logo" className="logo-image"/>
-                    <span>SparkPath</span>
+                    <Link className='navbar-title' to='/home'>SparkPath</Link>
                 </div>
                 <div className="navbar-menu">
-                    <span className="nav-item">Post a Ride</span>
-                    <span className="nav-item">Locate a Ride</span>
+                    <Link className="nav-item" to="/post">Post a Ride</Link>
+                    <Link className="nav-item" to="find-a-ride">Locate a Ride</Link>
                 </div>
             </div>
         </nav>

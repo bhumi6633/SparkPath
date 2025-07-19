@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 function Chatbot() {
+    const [isOpen, setIsOpen] = useState(true);
     const [messages, setMessages] = useState([
         { text: "Hello! How can I help you with SparkPath today?", isBot: true }
     ]);
@@ -8,8 +9,6 @@ function Chatbot() {
 
     const handleSendMessage = () => {
         if (inputMessage.trim() === '') return;
-        
-        // Add user message
         const newMessage = { text: inputMessage, isBot: false };
         setMessages([...messages, newMessage]);
         setInputMessage('');
@@ -23,42 +22,58 @@ function Chatbot() {
 
     return (
         <div className="chatbot-container">
-            <div className="chatbot-box">
-                <div className="chatbot-header">
+            {/* Toggle Button */}
+            {!isOpen && (
+                <button
+                    className="chatbot-toggle-btn"
+                    onClick={() => setIsOpen(true)}
+                    aria-label="Open Chatbot"
+                >
+                    <img src="/image1.png" alt="Open Chatbot" style={{ width: 36, height: 36, borderRadius: '50%' }} />
+                </button>
+            )}
+            {/* Chat Box */}
+            {isOpen && (
+                <div className="chatbot-box">
                     <div className="chatbot-header-content">
                         <h2>SparkPath Assistant</h2>
-                        <img src="/image1.png" alt="Logo" className="chatbot-header-logo" />
-                    </div>
-                    <p>Your ride-sharing companion</p>
-                </div>
-                <div className="chatbot-messages">
-                    {messages.map((message, index) => (
-                        <div key={index} className={`message-container ${message.isBot ? 'bot' : 'user'}`}>
-                            <div className={`message ${message.isBot ? 'bot' : 'user'}`}>
-                                {message.text}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div className="chatbot-input">
-                    <div className="input-container">
-                        <input
-                            type="text"
-                            value={inputMessage}
-                            onChange={(e) => setInputMessage(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Type your message here..."
-                            className="chatbot-input-field"
-                        />
                         <button
-                            onClick={handleSendMessage}
-                            className="chatbot-send-button"
+                            className="chatbot-close-btn"
+                            onClick={() => setIsOpen(false)}
+                            aria-label="Close Chatbot"
                         >
-                            Send
+                            ×
                         </button>
                     </div>
+                    <div className="chatbot-messages">
+                        {messages.map((message, index) => (
+                            <div key={index} className={`message-container ${message.isBot ? 'bot' : 'user'}`}>
+                                <div className={`message ${message.isBot ? 'bot' : 'user'}`}>
+                                    {message.text}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="chatbot-input">
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                value={inputMessage}
+                                onChange={(e) => setInputMessage(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                placeholder="Type your message here..."
+                                className="chatbot-input-field"
+                            />
+                            <button
+                                onClick={handleSendMessage}
+                                className="chatbot-send-button"
+                            >
+                                Send
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
