@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-
+from utils.maps_helper import get_distance_and_duration
 rides_bp = Blueprint('rides', __name__)
 
 mock_evs = [
@@ -14,14 +14,30 @@ mock_evs = [
 def get_available_rides():
     return jsonify(mock_evs)
 
+
+
 @rides_bp.route('find-a-ride', methods=['POST'])
 def find_a_ride():
     data = request.get_json()
-    ride_dist = data.get('estimated_distance_km', 0)
+    # ride_dist = data.get('estimated_distance_km', 0)
+    pickup = data.get("pickup")
+    dropoff = data.get("dropoff")
     passengers = data.get('passengers', 1)
 
-    #We will find EV's with enough range that can do with the ride
 
+    if not pickup or not dropoff:
+        return jsonify({"error": "Missing pickup or dropoff"}), 400
+    
+    #we will use the map api to get the real dist
+
+    total_trip_info = get_distance_and_duration(pickup, dropoff)
+    if not total_trip_info:
+        return jsonify({"error": "Could not get route information!"}), 500
+    
+
+    ride_dist = total_trip_info["distance_km"]
+
+    #We will find EV's with enough range that can do with the ride
     suitable_evs = []
     for ev in mock_evs:
         rem_range = (ev['battery']/100) * ev['range_km']
