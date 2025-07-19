@@ -1,5 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +18,8 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
+    port = int(os.getenv("FLASK_PORT", 5000))
     app.run(debug=True)
+
 
     
