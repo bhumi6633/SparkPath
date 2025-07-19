@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 annotated-types==0.7.0
 blinker==1.9.0
 cachetools==5.5.2
@@ -36,7 +35,6 @@ typing-inspection==0.4.1
 typing_extensions==4.14.1
 uritemplate==4.2.0
 urllib3==2.5.0
-=======
 blinker==1.9.0
 click==8.2.1
 Flask==3.1.1
@@ -44,5 +42,6 @@ flask-cors==6.0.1
 itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
->>>>>>> a8c0d44ceb7b0bc85fb30bcc8f09a412d64fc575
 Werkzeug==3.1.3
+requests
+google-generativeai
