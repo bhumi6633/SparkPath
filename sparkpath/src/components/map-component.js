@@ -12,7 +12,7 @@ const center = {
   lng: -79.3832,
 };
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 const MapComponent = () => {
   const location = useLocation();

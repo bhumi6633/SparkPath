@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MapComponent from './map-component';
+import { AuthContext } from '../App';
 
 function PostRide() {
+  const { isSignedIn } = useContext(AuthContext);
   return (
     <div className='par-postride-page'>
       <form className='par-form'>
@@ -56,7 +58,8 @@ function PostRide() {
         />
       </div>
       <div className='par-trip-card'>
-        <button className="search-rides" style={{ width: '100%' }}>Confirm</button>
+        <button className="search-rides" style={{ width: '100%' }} disabled={!isSignedIn} title={!isSignedIn ? 'Please sign in to confirm' : ''}>Confirm</button>
+        {!isSignedIn && <div style={{color: 'red', marginTop: 8}}>You must be signed in to confirm a ride.</div>}
       </div>
     </div>
   );
