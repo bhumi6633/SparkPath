@@ -1,0 +1,9 @@
+.pr-card {
+  background-color: rgba(30, 41, 59, 0.75); /* matching #1e293b with slight transparency */
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: #f8fafc;
+}
