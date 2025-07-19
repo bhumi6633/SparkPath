@@ -3,19 +3,61 @@ import React, { useState } from 'react';
 function Chatbot() {
     const [isOpen, setIsOpen] = useState(true);
     const [messages, setMessages] = useState([
-        { text: "Hello! How can I help you with SparkPath today?", isBot: true }
+        { text: "Hello! I'm EcoBot+, your SparkPath assistant. How can I help you with sustainable transportation today?", isBot: true }
     ]);
     const [inputMessage, setInputMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSendMessage = () => {
+    const sendMessageToAI = async (message) => {
+        try {
+            const response = await fetch('http://localhost:5000/ai/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    ride_summary: "" // You can add ride data here for context
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            return data.response;
+        } catch (error) {
+            console.error('Error calling AI:', error);
+            return "I'm sorry, I'm having trouble connecting right now. Please try again later.";
+        }
+    };
+
+    const handleSendMessage = async () => {
         if (inputMessage.trim() === '') return;
-        const newMessage = { text: inputMessage, isBot: false };
-        setMessages([...messages, newMessage]);
+        
+        const userMessage = inputMessage.trim();
+        const newUserMessage = { text: userMessage, isBot: false };
+        
+        setMessages(prev => [...prev, newUserMessage]);
         setInputMessage('');
+        setIsLoading(true);
+
+        try {
+            const aiResponse = await sendMessageToAI(userMessage);
+            const newBotMessage = { text: aiResponse, isBot: true };
+            setMessages(prev => [...prev, newBotMessage]);
+        } catch (error) {
+            const errorMessage = { text: "Sorry, I encountered an error. Please try again.", isBot: true };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !isLoading) {
             handleSendMessage();
         }
     };
@@ -36,7 +78,7 @@ function Chatbot() {
             {isOpen && (
                 <div className="chatbot-box">
                     <div className="chatbot-header-content">
-                        <h2>SparkPath Assistant</h2>
+                        <h2>EcoBot+ Assistant</h2>
                         <button
                             className="chatbot-close-btn"
                             onClick={() => setIsOpen(false)}
@@ -53,6 +95,20 @@ function Chatbot() {
                                 </div>
                             </div>
                         ))}
+                        {isLoading && (
+                            <div className="message-container bot">
+                                <div className="message bot">
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div className="typing-indicator">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                        EcoBot+ is thinking...
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="chatbot-input">
                         <div className="input-container">
@@ -61,12 +117,14 @@ function Chatbot() {
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
                                 onKeyPress={handleKeyPress}
-                                placeholder="Type your message here..."
+                                placeholder="Ask me about sustainable transportation..."
                                 className="chatbot-input-field"
+                                disabled={isLoading}
                             />
                             <button
                                 onClick={handleSendMessage}
                                 className="chatbot-send-button"
+                                disabled={isLoading}
                             >
                                 Send
                             </button>
