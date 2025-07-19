@@ -1,91 +1,43 @@
-import React, { useState, useCallback } from 'react';
-import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
-const containerStyle = {
-  width: '100%',
-  height: '500px', // Large map
-  border: '1px solid #FFD700',
-  borderRadius: '8px',
-};
+const start = [43.6532, -79.3832]; // Toronto
+const end = [43.6426, -79.3871];   // CN Tower
 
-const center = {
-  lat: 43.6532,  // Example: Toronto
-  lng: -79.3832,
-};
+const MapORS = () => {
+  const [routeCoords, setRouteCoords] = useState([]);
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-if(!apiKey) {
-  console.error("Missing Google Maps API Key")
-  alert("Map cannot load: Missing Google Maps API")
-}
+  useEffect(() => {
+    const fetchRoute = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/ors/route', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ start: [start[1], start[0]], end: [end[1], end[0]] }) // lng, lat
+        });
+        const data = await res.json();
+        const coords = data.features[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+        setRouteCoords(coords);
+      } catch (err) {
+        console.error('Failed to load route:', err);
+      }
+    };
 
-const MapComponent = () => {
-  const [map, setMap] = useState(null);
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: apiKey,
-  });
-
-  const onLoad = useCallback((map) => {
-    setMap(map);
+    fetchRoute();
   }, []);
-
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
-
-  if (loadError) {
-    return (
-      <div style={{ 
-        width: '100%', 
-        height: '500px', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-        borderRadius: '8px',
-        border: '1px solid #FFD700'
-      }}>
-        <div style={{ textAlign: 'center', color: '#666' }}>
-          <p>Error loading map</p>
-          <p style={{ fontSize: '14px' }}>Please check your internet connection</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isLoaded) {
-    return (
-      <div style={{ 
-        width: '100%', 
-        height: '500px', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-        borderRadius: '8px',
-        border: '1px solid #FFD700'
-      }}>
-        <div style={{ textAlign: 'center', color: '#666' }}>
-          <p>Loading map...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={12}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-      >
-        {/* Add markers or other components here */}
-      </GoogleMap>
-    </div>
+    <MapContainer center={start} zoom={14} style={{ height: '500px', width: '100%' }}>
+      <TileLayer
+        attribution='&copy; <a href="https://openrouteservice.org/">ORS</a>'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={start} />
+      <Marker position={end} />
+      <Polyline positions={routeCoords} color="blue" />
+    </MapContainer>
   );
 };
 
-export default MapComponent;
+export default MapORS;
