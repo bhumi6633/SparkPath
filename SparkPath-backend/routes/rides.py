@@ -1,4 +1,7 @@
 from flask import Blueprint, request, jsonify
+from flask import current_app
+from bson import ObjectId
+from datetime import datetime
 from utils.maps_helper import get_distance_and_duration
 from utils.carbon_calc import (
     calculate_co2_saved,
@@ -19,6 +22,7 @@ mock_evs = [
 @rides_bp.route('/', methods=['GET'])
 def get_available_rides():
     return jsonify(mock_evs)
+
 
 @rides_bp.route('/find-a-ride', methods=['POST'])
 def find_a_ride():
@@ -50,12 +54,12 @@ def find_a_ride():
 
     selected_ev = max(suitable_evs, key=lambda x: x['remaining_range'])
 
-    # 🌱 Carbon logic using utils
+    #  Carbon logic using utils
     base_co2 = calculate_co2_saved(ride_dist)
     pooled_co2 = apply_pooling_mult(base_co2, passengers)
     trees_saved = convert_to_trees_saved(pooled_co2)
 
-    # 🔤 Gemini summary + response
+    #  Gemini summary + response
     prompt = format_ride_summary({
         "model": selected_ev['model'],
         "distance_km": ride_dist,
@@ -84,3 +88,70 @@ def find_a_ride():
         "gemini_prompt_summary": prompt,
         "gemini_response": gemini_reply
     })
+
+@rides_bp.route('/book', methods=['POST'])
+def book_ride():
+    data = request.get_json()
+
+    # Basic required fields
+    required_fields = ['pickup', 'dropoff', 'distance_km', 'passengers', 'co2_saved_kg']
+    missing = [field for field in required_fields if field not in data]
+
+    if missing:
+        return jsonify({"error": f"Missing fields: {', '.join(missing)}"}), 400
+
+    try:
+        current_app.db.rides.insert_one(data)
+        return jsonify({"message": "Ride stored successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@rides_bp.route('/history', methods=['GET'])
+def get_ride_history():
+    try:
+        # Optional query params
+        user_id = request.args.get('user_id')
+        start_date = request.args.get('start_date')  # Format: YYYY-MM-DD
+        end_date = request.args.get('end_date')      # Format: YYYY-MM-DD
+
+        query = {}
+
+        if user_id:
+            query['user_id'] = user_id
+
+        if start_date or end_date:
+            query['timestamp'] = {}
+
+            if start_date:
+                query['timestamp']['$gte'] = datetime.strptime(start_date, "%Y-%m-%d")
+            if end_date:
+                query['timestamp']['$lte'] = datetime.strptime(end_date, "%Y-%m-%d")
+
+        rides_cursor = current_app.db.rides.find(query)
+        rides = []
+        for ride in rides_cursor:
+            ride['_id'] = str(ride['_id'])
+            ride['timestamp'] = ride.get('timestamp', datetime.utcnow()).strftime("%Y-%m-%d %H:%M")
+            rides.append(ride)
+
+        return jsonify(rides), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@rides_bp.route('/cancel/<ride_id>', methods=['PATCH'])
+def cancel_ride(ride_id):
+    try:
+        result = current_app.db.rides.update_one(
+            {"_id": ObjectId(ride_id)},
+            {"$set": {"status": "cancelled"}}
+        )
+
+        if result.matched_count == 0:
+            return jsonify({"error": "Ride not found"}), 404
+
+        return jsonify({"message": f"Ride {ride_id} has been cancelled"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
