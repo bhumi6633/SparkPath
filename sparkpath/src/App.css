@@ -12,8 +12,17 @@
 }
 
 .navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 1.5rem;
     font-weight: bold;
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+    border-radius: 50%;
 }
 
 .navbar-menu {
