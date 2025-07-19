@@ -4,6 +4,8 @@ import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
 const containerStyle = {
   width: '100%',
   height: '500px', // Large map
+  border: '1px solid #FFD700',
+  borderRadius: '8px',
 };
 
 const center = {
@@ -38,7 +40,7 @@ const MapComponent = () => {
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
         borderRadius: '8px',
-        border: '1px solid #ddd'
+        border: '1px solid #FFD700'
       }}>
         <div style={{ textAlign: 'center', color: '#666' }}>
           <p>Error loading map</p>
@@ -58,7 +60,7 @@ const MapComponent = () => {
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
         borderRadius: '8px',
-        border: '1px solid #ddd'
+        border: '1px solid #FFD700'
       }}>
         <div style={{ textAlign: 'center', color: '#666' }}>
           <p>Loading map...</p>

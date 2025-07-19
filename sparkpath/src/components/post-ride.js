@@ -2,15 +2,16 @@ import React, { useContext } from 'react';
 import MapComponent from './map-component';
 import { AuthContext } from '../App';
 import { Link } from 'react-router-dom';
+import './postride.css';
 
 function PostRide() {
   const { isSignedIn } = useContext(AuthContext);
 
   return (
-    <div className="pr-container">
+    <div className="par-postride-page">
       <div className="pr-card">
         <h1 className="pr-heading">Post a Ride</h1>
-        <form className="pr-form">
+        <form className="pr-form pr-form-row">
           <div className="pr-form-fields">
             <div className="pr-form-group">
               <label htmlFor="start">Start:</label>
@@ -33,12 +34,10 @@ function PostRide() {
               <textarea placeholder="Enter Trip Description" rows="3" />
             </div>
           </div>
-
           <div className="pr-map">
             <MapComponent />
           </div>
         </form>
-
         <div className="pr-confirm-wrapper">
           <Link
             to="/confirm"
