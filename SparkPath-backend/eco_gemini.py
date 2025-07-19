@@ -6,6 +6,9 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 def ask_gemini(prompt_summary, user_question):
+    model = genai.GenerativeModel('gemini-2.0-flash')
+    chat = model.start_chat()
+
     full_prompt = f"""
 You are EcoBot+, an AI assistant in the EcoRoute EV rideshare app.
 
