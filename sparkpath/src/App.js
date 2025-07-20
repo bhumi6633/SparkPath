@@ -10,6 +10,8 @@ import 'leaflet/dist/leaflet.css';
 import './components/signup.css';
 import './components/post-ride.css';
 import './components/find-a-ride.css';
+import RideList from './components/ridelist';
+import RideHistory from './components/ridehistory';
 /*import './components/navbar.css';*/
 import FoundRides from './components/found-rides';
 import HomePage from './components/homepage';
@@ -42,6 +44,8 @@ function App() {
             <Route path="/sign" element={<SignUpIn />} />
             <Route path="/confirm" element={<PostRideConfirm />} />
             <Route path="/home" element={<HomePage />} />
+            <Route path="/rides" element={<RideList />} />
+            <Route path="/history" element={<RideHistory />} />
           </Routes>
           <Chatbot />
         </div>
