@@ -3,7 +3,7 @@ from utils.carbon_calc import calculate_co2_saved, convert_to_trees_saved, apply
 
 carbon_bp = Blueprint('carbon', __name__)
 
-@carbon_bp.route('/', methods=['POST'])
+@carbon_bp.route('/estimate', methods=['POST'])
 
 def get_carbon_savings():
     data= request.get_json()

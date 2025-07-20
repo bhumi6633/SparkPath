@@ -1,38 +1,33 @@
 import requests
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
-
-GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+ORS_API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjFlNjczY2RiZWY4ZjQyZGU5ZWUyNjdmMTg5NWZiYjM0IiwiaCI6Im11cm11cjY0In0="
 
 def get_distance_and_duration(pickup, dropoff):
-    url = "https://maps.googleapis.com/maps/api/distancematrix/json"
-    params = {
-        "origins": pickup,
-        "destinations": dropoff,
-        "mode": "driving",
-        "key": GOOGLE_MAPS_API_KEY
-    }
+    try:
+        url = "https://api.openrouteservice.org/v2/directions/driving-car"
+        headers = {
+            "Authorization": ORS_API_KEY,
+            "Content-Type": "application/json"
+        }
 
-    response = requests.get(url, params=params)
-    data = response.json()
+        body = {
+            "coordinates": [pickup, dropoff],
+            "units": "km"
+        }
 
-    # print("Request URL", response.url)
-    # print("API rsp: ", response.json())
+        response = requests.post(url, json=body, headers=headers)
+        response.raise_for_status()
+        data = response.json()
 
-    if data['status'] != "OK" or not data["rows"]:
+        summary = data["features"][0]["properties"]["summary"]
+        distance = round(summary["distance"], 2)
+        duration = round(summary["duration"] / 60, 1)
+
+        return {
+            "distance_km": distance,
+            "duration_minutes": duration
+        }
+
+    except Exception as e:
+        print("Error fetching route:", e)
         return None
-
-    element = data["rows"][0]["elements"][0]
-    if element['status'] != "OK":
-        return None 
-    
-    distance_meters = element["distance"]["value"]
-    duration_sec = element["duration"]["value"]
-
-    return{
-        "distance_km": round(distance_meters/1000,2),
-        "duration_min": round(duration_sec/60,1)
-    }
-

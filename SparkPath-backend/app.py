@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import os
+from routes.find_ride import find_ride_bp
 from routes.rides import rides_bp
 from routes.carbon import carbon_bp
 from routes.time import time_bp
@@ -42,6 +43,7 @@ def create_app():
     app.register_blueprint(stations_bp, url_prefix='/stations')
     app.register_blueprint(summary_bp, url_prefix='/summary')
     app.register_blueprint(dashboard_bp, url_prefix="/dashboard")
+    app.register_blueprint(find_ride_bp, url_prefix='/rides')
     app.register_blueprint(auth_bp)
     return app
 
