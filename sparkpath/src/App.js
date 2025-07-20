@@ -6,7 +6,7 @@ import SignUpIn from './components/sign-up-in';
 import PostRide from './components/post-ride';
 import FindARide from './components/find-a-ride';
 import './components/homepage.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import 'leaflet/dist/leaflet.css';
 import './components/signup.css';
 import './components/post-ride.css';
 import './components/find-a-ride.css';

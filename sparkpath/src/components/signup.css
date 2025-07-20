@@ -59,6 +59,23 @@
   box-shadow: 0 0 0 2px rgba(27, 67, 50, 0.3); /* subtle green glow */
 }
 
+.su-input.error {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.su-input.error:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3);
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
 .su-button {
   padding: 0.8rem 1rem;
   margin-top: 1rem;

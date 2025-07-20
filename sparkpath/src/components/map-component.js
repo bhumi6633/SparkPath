@@ -1,138 +1,120 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+
+const from = [43.65107, -79.347015]; // Toronto
+const to = [45.501689, -73.567256];  // Montreal
+const apiKey = process.env.REACT_APP_ORS_API_KEY;
 
 const MapComponent = () => {
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
-  const [routeCoords, setRouteCoords] = useState([]);
-  const [distance, setDistance] = useState(null);
-  const [duration, setDuration] = useState(null);
-
-  const [startQuery, setStartQuery] = useState('');
-  const [endQuery, setEndQuery] = useState('');
-  const [startResults, setStartResults] = useState([]);
-  const [endResults, setEndResults] = useState([]);
-
-  const searchLocation = async (query, setResults) => {
-    if (!query) return;
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
-    const data = await res.json();
-    setResults(data);
-  };
-
-  const handleSelectLocation = (place, type) => {
-    const coords = [parseFloat(place.lat), parseFloat(place.lon)];
-    if (type === 'start') {
-      setStart(coords);
-      setStartQuery(place.display_name);
-      setStartResults([]);
-    } else {
-      setEnd(coords);
-      setEndQuery(place.display_name);
-      setEndResults([]);
-    }
-  };
+  const [routeInfo, setRouteInfo] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!apiKey) {
+      setError('OpenRouteService API key is missing. Check your .env file and restart the dev server.');
+      return;
+    }
     const fetchRoute = async () => {
-      if (!start || !end) return;
       try {
-        const res = await fetch('http://localhost:5000/ors/route', {
+        const url = 'https://api.openrouteservice.org/v2/directions/driving-car/geojson';
+        const response = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ start: [start[1], start[0]], end: [end[1], end[0]] })
+          headers: {
+            'Authorization': apiKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            coordinates: [[from[1], from[0]], [to[1], to[0]]], // ORS uses [lng, lat]
+          }),
         });
-        const data = await res.json();
-        const coords = data.geojson.features[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
-        setRouteCoords(coords);
-        setDistance(data.distance);
-        setDuration(data.duration);
+        if (!response.ok) throw new Error('Failed to fetch route');
+        const data = await response.json();
+        
+        // Extract route information
+        const feature = data.features[0];
+        const distance = (feature.properties.summary.distance / 1000).toFixed(1); // Convert to km
+        const duration = Math.round(feature.properties.summary.duration / 60); // Convert to minutes
+        
+        setRouteInfo({
+          distance: `${distance} km`,
+          duration: `${duration} minutes`,
+          coordinates: feature.geometry.coordinates.length
+        });
       } catch (err) {
-        console.error('Failed to load route:', err);
+        setError('Error loading route from ORS: ' + err.message);
       }
     };
-
     fetchRoute();
-  }, [start, end]);
+  }, [apiKey]);
 
-  const reset = () => {
-    setStart(null);
-    setEnd(null);
-    setRouteCoords([]);
-    setDistance(null);
-    setDuration(null);
-    setStartQuery('');
-    setEndQuery('');
-    setStartResults([]);
-    setEndResults([]);
-  };
-
-  return (
-    <>
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-        <div style={{ flex: 1 }}>
-          <input
-            value={startQuery}
-            onChange={(e) => {
-              setStartQuery(e.target.value);
-              searchLocation(e.target.value, setStartResults);
-            }}
-            placeholder="Start location..."
-            style={{ width: '100%', padding: '8px', borderRadius: '6px' }}
-          />
-          {startResults.length > 0 && (
-            <ul style={{ listStyle: 'none', padding: 0, maxHeight: '100px', overflowY: 'auto', background: '#fff', border: '1px solid #ddd' }}>
-              {startResults.map((place, index) => (
-                <li key={index} style={{ padding: '5px', cursor: 'pointer' }} onClick={() => handleSelectLocation(place, 'start')}>
-                  {place.display_name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div style={{ flex: 1 }}>
-          <input
-            value={endQuery}
-            onChange={(e) => {
-              setEndQuery(e.target.value);
-              searchLocation(e.target.value, setEndResults);
-            }}
-            placeholder="End location..."
-            style={{ width: '100%', padding: '8px', borderRadius: '6px' }}
-          />
-          {endResults.length > 0 && (
-            <ul style={{ listStyle: 'none', padding: 0, maxHeight: '100px', overflowY: 'auto', background: '#fff', border: '1px solid #ddd' }}>
-              {endResults.map((place, index) => (
-                <li key={index} style={{ padding: '5px', cursor: 'pointer' }} onClick={() => handleSelectLocation(place, 'end')}>
-                  {place.display_name}
-                </li>
-              ))}
-            </ul>
-          )}
+  if (error) {
+    return (
+      <div style={{ 
+        width: '100%', 
+        height: '500px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '8px',
+        border: '1px solid #FFD700'
+      }}>
+        <div style={{ textAlign: 'center', color: '#c00' }}>
+          <p>{error}</p>
         </div>
       </div>
+    );
+  }
 
-      <MapContainer center={[43.65, -79.38]} zoom={13} style={{ height: '500px', width: '100%', borderRadius: '10px' }}>
-        <TileLayer
-          attribution='&copy; OpenStreetMap'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {start && <Marker position={start} />}
-        {end && <Marker position={end} />}
-        {routeCoords.length > 0 && <Polyline positions={routeCoords} color="blue" />}
-      </MapContainer>
-
-      {distance && duration && (
-        <div style={{ marginTop: '10px', fontSize: '16px' }}>
-          <p><strong>Distance:</strong> {distance} km</p>
-          <p><strong>Duration:</strong> {duration} minutes</p>
-        </div>
-      )}
-
-      <button onClick={reset} style={{ marginTop: '10px' }}>Reset</button>
-    </>
+  return (
+    <div style={{ 
+      width: '100%', 
+      height: '500px', 
+      backgroundColor: '#f0f8ff',
+      borderRadius: '8px',
+      border: '1px solid #FFD700',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px'
+    }}>
+      <h3 style={{ color: '#333', marginBottom: '20px' }}>Route Information</h3>
+      
+      <div style={{ 
+        backgroundColor: 'white', 
+        padding: '20px', 
+        borderRadius: '8px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        textAlign: 'center'
+      }}>
+        <h4 style={{ color: '#2c5aa0', marginBottom: '15px' }}>Toronto → Montreal</h4>
+        
+        {routeInfo ? (
+          <div>
+            <p style={{ fontSize: '18px', margin: '10px 0' }}>
+              <strong>Distance:</strong> {routeInfo.distance}
+            </p>
+            <p style={{ fontSize: '18px', margin: '10px 0' }}>
+              <strong>Duration:</strong> {routeInfo.duration}
+            </p>
+            <p style={{ fontSize: '14px', color: '#666', marginTop: '15px' }}>
+              Route coordinates: {routeInfo.coordinates} points
+            </p>
+          </div>
+        ) : (
+          <p style={{ color: '#666' }}>Loading route information...</p>
+        )}
+      </div>
+      
+      <p style={{ 
+        fontSize: '12px', 
+        color: '#999', 
+        marginTop: '20px',
+        textAlign: 'center'
+      }}>
+        Powered by OpenRouteService API
+      </p>
+    </div>
   );
 };
 
