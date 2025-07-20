@@ -29,3 +29,11 @@ def def_summary():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+def format_ride_summary(data):
+    return (
+        f"You're riding a {data['model']} over {data['distance_km']} km. "
+        f"This trip will take approximately {data['duration_minutes']} minutes. "
+        f"With {data['passengers']} passenger(s), you're saving {data['co2_saved_kg']} kg of CO₂, "
+        f"which is equivalent to saving {data['trees_saved']} trees. 🌱"
+    )

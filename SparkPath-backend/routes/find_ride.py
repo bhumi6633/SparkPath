@@ -3,7 +3,7 @@ from datetime import datetime
 from utils.maps_helper import get_distance_and_duration
 from utils.carbon_calc import calculate_co2_saved, convert_to_trees_saved, apply_pooling_mult
 from utils.geocode_helper import geocode_location
-from summary import format_ride_summary
+from routes.summary import format_ride_summary
 from eco_gemini import ask_gemini
 
 find_ride_bp = Blueprint('find_ride', __name__)
