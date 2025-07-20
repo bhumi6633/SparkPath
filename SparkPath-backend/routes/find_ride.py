@@ -4,7 +4,7 @@ from utils.maps_helper import get_distance_and_duration
 from utils.carbon_calc import calculate_co2_saved, convert_to_trees_saved, apply_pooling_mult
 from utils.geocode_helper import geocode_location
 from routes.summary import format_ride_summary
-from eco_gemini import ask_gemini
+# from eco_gemini import ask_gemini
 
 find_ride_bp = Blueprint('find_ride', __name__)
 
@@ -69,7 +69,7 @@ def find_a_ride():
             "trees_saved": trees_saved,
             "passengers": passengers
         })
-        gemini_reply = ask_gemini(prompt, user_question)
+        # gemini_reply = ask_gemini(prompt, user_question)
 
         # Store ride
         ride_doc = {
@@ -85,7 +85,7 @@ def find_a_ride():
             "co2_saved_kg": co2_saved,
             "trees_saved": trees_saved,
             "gemini_prompt": prompt,
-            "gemini_reply": gemini_reply,
+            # "gemini_reply": gemini_reply,
             "timestamp": datetime.utcnow(),
             "status": "planned"
         }
@@ -103,7 +103,7 @@ def find_a_ride():
             "passengers": passengers,
             "co2_saved_kg": co2_saved,
             "trees_saved": trees_saved,
-            "gemini_summary": gemini_reply
+            # "gemini_summary": gemini_reply
         })
 
     except Exception as e:

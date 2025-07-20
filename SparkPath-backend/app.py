@@ -28,8 +28,6 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    
-    # MongoDB setup
     mongo_uri = os.getenv("MONGO_URI")
     mongo_client = MongoClient(mongo_uri)
     app.db = mongo_client["SparkPath"]  # Use the default DB from URI

@@ -8,8 +8,8 @@ from utils.carbon_calc import (
     convert_to_trees_saved,
     apply_pooling_mult
 )
-from prompt_builder import format_ride_summary
-from eco_gemini import ask_gemini
+# from prompt_builder import format_ride_summary
+# from eco_gemini import ask_gemini
 
 rides_bp = Blueprint('rides', __name__)
 
@@ -60,16 +60,16 @@ def find_a_ride():
     pooled_co2 = apply_pooling_mult(base_co2, passengers)
     trees_saved = convert_to_trees_saved(pooled_co2)
 
-    prompt = format_ride_summary({
-        "model": selected_ev['model'],
-        "distance_km": ride_dist,
-        "duration_minutes": duration,
-        "co2_saved_kg": pooled_co2,
-        "trees_saved": trees_saved,
-        "passengers": passengers
-    })
+    # prompt = format_ride_summary({
+    #     "model": selected_ev['model'],
+    #     "distance_km": ride_dist,
+    #     "duration_minutes": duration,
+    #     "co2_saved_kg": pooled_co2,
+    #     "trees_saved": trees_saved,
+    #     "passengers": passengers
+    # })
 
-    gemini_reply = ask_gemini(prompt, user_question)
+    # gemini_reply = ask_gemini(prompt, user_question)
 
     ride_doc = {
         "user_id": user_id,
@@ -85,7 +85,7 @@ def find_a_ride():
         "duration_minutes": duration,
         "co2_saved_kg": pooled_co2,
         "trees_saved": trees_saved,
-        "gemini_summary": gemini_reply,
+        # "gemini_summary": gemini_reply,
         "status": "confirmed",
         "timestamp": datetime.utcnow()
     }
@@ -105,7 +105,7 @@ def find_a_ride():
         "passengers": passengers,
         "co2_saved_kg": pooled_co2,
         "trees_saved": trees_saved,
-        "gemini_prompt_summary": prompt,
-        "gemini_response": gemini_reply,
+        # "gemini_prompt_summary": prompt,
+        # "gemini_response": gemini_reply,
         "status": "confirmed"
     }), 200
