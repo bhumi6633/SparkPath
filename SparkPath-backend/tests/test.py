@@ -1,5 +1,8 @@
 import os
-from dotenv import load_dotenv
+import google.generativeai as genai
 
-load_dotenv()
-print("ENV in maps_helper:", os.getenv("GOOGLE_MAPS_API_KEY"))
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-2.0-flash")
+response = model.generate_content("What is sustainable transportation?")
+print(response.text)
