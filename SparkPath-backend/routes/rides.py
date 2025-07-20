@@ -113,6 +113,10 @@ def book_ride():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@rides_bp.route('/history', methods=['GET'])
+def ride_history():
+    rides = list(current_app.db.rides.find({}, {'_id': 0}))  # Exclude _id
+    return jsonify({'rides': rides})
 
 
 @rides_bp.route('/history', methods=['GET'])
