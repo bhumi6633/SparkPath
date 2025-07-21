@@ -11,6 +11,8 @@ function PostRide() {
   const [toCoords, setToCoords] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
+const [benefits, setBenefits] = useState('');
+
 
   const geocode = async (place, setter) => {
     try {
@@ -31,6 +33,20 @@ function PostRide() {
     if (type === 'from') geocode(fromText, setFromCoords);
     else geocode(toText, setToCoords);
   };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      
+    }
+  };
+
+  const calculateBenefits = (distanceKm) => {
+  const co2PerKm = 0.1965; // in kg/km for an average car
+  const carpoolFactor = 0.25; // Assuming 75% CO₂ saved by sharing
+  const co2Saved = distanceKm * co2PerKm * carpoolFactor;
+  return `${co2Saved.toFixed(2)} kg CO₂ saved`;
+};
 
   return (
     <div className='par-postride-page'>
@@ -66,7 +82,8 @@ function PostRide() {
                 type='text' 
                 placeholder='Benefits' 
                 className="end-input"
-                disabled
+                value={benefits}
+                readOnly
               />
             </div>
             <div className='par-formgroup'>
@@ -80,7 +97,15 @@ function PostRide() {
           </div>
           <div className='par-map-container'>
             {fromCoords && toCoords ? (
-              <MapComponent from={fromCoords} to={toCoords} onRouteInfo={({ distance, duration }) => { setDistance(distance); setDuration(duration); }} />
+              <MapComponent
+                from={fromCoords}
+                to={toCoords}
+                onRouteInfo={({ distance, duration, co2Saved }) => {
+                  setDistance(distance);
+                  setDuration(duration);
+                  setBenefits(co2Saved); 
+                }}
+              />
             ) : (
               <p style={{ textAlign: 'center', marginTop: '50%', color: '#999' }}>
                 Enter locations to preview route
