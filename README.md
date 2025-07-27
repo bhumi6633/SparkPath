@@ -4,7 +4,7 @@
 **Eco-friendly Ridesharing Platform**  
 Plan greener routes, save CO₂, and track your impact.
 
-## 🚗 Overview
+## Overview
 
 SparkPath is a smart carpooling web application designed to promote sustainable ridesharing. It provides users with:
 
@@ -12,11 +12,11 @@ SparkPath is a smart carpooling web application designed to promote sustainable 
 - CO₂ and tree-saving statistics
 - AI-powered ride suggestions
 - Historical ride tracking
-- Clean UI with Leaflet and Google Maps
+
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 **Frontend:**
 - React.js
@@ -33,14 +33,13 @@ SparkPath is a smart carpooling web application designed to promote sustainable 
 
 ---
 
-## 🧩 Features
+## Features
 
 - Post a Ride with route, time, and details
 - Find a Ride using AI + route suggestion
 - Live CO₂ & trees saved stats
 - Persistent ride history in MongoDB
 - Secure login system with AuthContext
-- Glassmorphic UI and dark mode design
 
 ---
 
